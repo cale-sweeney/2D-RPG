@@ -1,5 +1,6 @@
 package dev.ryanandcale.rpggame;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
@@ -44,9 +45,18 @@ public class Game implements Runnable{
 			return;
 		}
 		g = bs.getDrawGraphics();
-		//Begin Drawing
+		//clear screen
+		g.clearRect(0, 0, width, height);
 		
-		g.fillRect(0, 0, width, height);
+		//Begin Drawing
+		//The order you place your code matters.
+		
+		//g.drawRect(10, 50, 50, 70);
+		
+		g.setColor(Color.red);
+		g.fillRect(10, 50, 50, 70);
+		g.setColor(Color.green);
+		g.fillRect(0, 0, 10, 10);
 		
 		
 		//End Drawing
