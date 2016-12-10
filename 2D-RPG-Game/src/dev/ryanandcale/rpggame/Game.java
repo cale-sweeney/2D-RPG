@@ -10,6 +10,7 @@ import dev.ryanandcale.rpggame.gfx.Assets;
 import dev.ryanandcale.rpggame.gfx.ImageLoader;
 import dev.ryanandcale.rpggame.gfx.SpriteSheet;
 import dev.ryanandcale.rpggame.states.GameState;
+import dev.ryanandcale.rpggame.states.MenuState;
 import dev.ryanandcale.rpggame.states.State;
 
 public class Game implements Runnable{
@@ -27,6 +28,7 @@ public class Game implements Runnable{
 	
 	//States
 	private State gameState;
+	private State menuState;
 	
 	//private BufferedImage test;
 	//private SpriteSheet sheet;
@@ -45,6 +47,7 @@ public class Game implements Runnable{
 		//sheet = new SpriteSheet(test);
 		Assets.init();
 		gameState = new GameState();
+		menuState = new MenuState();
 		State.setState(gameState);
 	}
 	
@@ -68,8 +71,7 @@ public class Game implements Runnable{
 		//clear screen
 		g.clearRect(0, 0, width, height);
 		
-		//Begin Drawing
-		//The order you place your code matters.
+		//Begin Drawing (the order you place your code matters)
 		
 		if(State.getState() != null)
 			State.getState().render(g);
@@ -121,11 +123,11 @@ public class Game implements Runnable{
 				delta--;
 			}
 			
-			if (timer >= 1000000000){
+/*			if (timer >= 1000000000){
 				System.out.println("Ticks and Frames: " + ticks);
 				ticks = 0;
 				timer = 0;
-			}
+			}*/
 			
 		}
 		
