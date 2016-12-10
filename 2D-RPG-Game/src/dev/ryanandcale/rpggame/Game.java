@@ -9,6 +9,7 @@ import dev.ryanandcale.rpggame.display.Display;
 import dev.ryanandcale.rpggame.gfx.Assets;
 import dev.ryanandcale.rpggame.gfx.ImageLoader;
 import dev.ryanandcale.rpggame.gfx.SpriteSheet;
+import dev.ryanandcale.rpggame.input.KeyManager;
 import dev.ryanandcale.rpggame.states.GameState;
 import dev.ryanandcale.rpggame.states.MenuState;
 import dev.ryanandcale.rpggame.states.State;
@@ -30,6 +31,9 @@ public class Game implements Runnable{
 	private State gameState;
 	private State menuState;
 	
+	//Input
+	private KeyManager keyManager;
+	
 	//private BufferedImage test;
 	//private SpriteSheet sheet;
 	
@@ -37,17 +41,19 @@ public class Game implements Runnable{
 		this.width = width;
 		this.height = height;
 		this.title = title;
+		keyManager = new KeyManager();
 		
 	}
 	
 	//initialize the graphics for our game, get things setup
 	private void init(){
 		display = new Display(title, width, height);
+		display.getFrame().addKeyListener(keyManager);
 		//test = ImageLoader.loadImage("/textures/SpriteSheet1.jpg");
 		//sheet = new SpriteSheet(test);
 		Assets.init();
-		gameState = new GameState();
-		menuState = new MenuState();
+		gameState = new GameState(this);
+		menuState = new MenuState(this);
 		State.setState(gameState);
 	}
 	
@@ -56,6 +62,8 @@ public class Game implements Runnable{
 	//update all the variables for our game
 	//
 	private void tick(){
+		keyManager.tick();
+		
 		if(State.getState() != null)
 			State.getState().tick();
 	}
@@ -123,15 +131,21 @@ public class Game implements Runnable{
 				delta--;
 			}
 			
-/*			if (timer >= 1000000000){
+			//prints the frames per second on to the screen
+			if (timer >= 1000000000){
 				System.out.println("Ticks and Frames: " + ticks);
 				ticks = 0;
 				timer = 0;
-			}*/
+			}
 			
 		}
 		
 		stop();
+	}
+	
+	//So other classes can access the keyManager
+	public KeyManager getKeyManager(){
+		return keyManager;
 	}
 	
 	public synchronized void start(){
