@@ -6,7 +6,7 @@ public class Assets {
 
 	private static final int width = 100, height = 100;
 	
-	public static BufferedImage player, bush, agave, grass, dirt;
+	public static BufferedImage player, bush, agave, grass, dirt, rock;
 	
 	public static void init(){
 		SpriteSheet masterSheet = new SpriteSheet(ImageLoader.loadImage("/textures/MasterSheet.png"));
@@ -16,6 +16,7 @@ public class Assets {
 		bush = masterSheet.crop(100, 0, height, width);
 		agave = masterSheet.crop(200, 0, height, width);
 		grass = masterSheet.crop(100, 100, height, width);
+		rock = masterSheet.crop(200, 100, height, width);
 	}
 	
 }
