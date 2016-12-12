@@ -25,8 +25,16 @@ public class World {
 	}
 	
 	public void render(Graphics g){
-		for(int y = 0; y < height; y++){
-			for(int x = 0; x < width; x++){
+		
+		//These four calculations are asking: Is zero greater than our game camera's offset?
+		//The goal is to reduce the amount of rendering that is done to only what the user can see.
+		int xStart = (int) Math.max(0, game.getGameCamera().getxOffset() / Tile.TILEWIDTH); //don't want this to go negative, hence using max
+		int xEnd = (int) Math.min(width, (game.getGameCamera().getxOffset() + game.getWidth()) / Tile.TILEWIDTH + 1);
+		int yStart = (int) Math.max(0, game.getGameCamera().getyOffset() / Tile.TILEHEIGHT);
+		int yEnd = (int) Math.min(height, (game.getGameCamera().getyOffset() + game.getHeight()) / Tile.TILEHEIGHT + 1);
+		
+		for(int y = yStart; y < yEnd; y++){ ////tiles from the top of the user's view to the tile on the bottom of the user's view
+			for(int x = xStart; x < xEnd; x++){ //tiles from the far left of the user's view to the tile on the far right of the user's view
 				getTile(x,y).render(g, (int) (x * Tile.TILEWIDTH - game.getGameCamera().getxOffset()), 
 						(int) (y * Tile.TILEHEIGHT - game.getGameCamera().getyOffset()));
 			}
