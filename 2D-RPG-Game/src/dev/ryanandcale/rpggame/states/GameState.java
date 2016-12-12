@@ -16,13 +16,19 @@ public class GameState extends State{
 	public GameState(Game game){
 		super(game);
 		player = new Player(game,100,100);
-		world = new World("res/worlds/world1.txt");
+		world = new World(game, "res/worlds/world1.txt");
+		
+		//game.getGameCamera().move(100, 200); //controls where the game camera starts
 	}
 	
 	@Override
 	public void tick() {
 		world.tick();
 		player.tick();
+		
+		
+		
+		//game.getGameCamera().move(1, 1);//float the game camera slowly diagonally.
 		
 	}
 

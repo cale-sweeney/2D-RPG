@@ -6,12 +6,9 @@ import dev.ryanandcale.rpggame.Game;
 import dev.ryanandcale.rpggame.gfx.Assets;
 
 public class Player extends Creature{
-
-	private Game game;
 	
 	public Player(Game game, float x, float y) {
-		super(x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
-		this.game = game;
+		super(game, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
 		
 	}
 
@@ -19,6 +16,7 @@ public class Player extends Creature{
 	public void tick() {
 		getInput();
 		move();
+		game.getGameCamera().centerOnEntity(this); //center the camera on this player after he moves
 
 		//old-style of moving, now in getInput()
 /*		if(game.getKeyManager().up)
@@ -50,7 +48,8 @@ public class Player extends Creature{
 	@Override
 	public void render(Graphics g) {
 		//width and height parameters determine the size of the final size of the player on the screen
-		g.drawImage(Assets.player, (int)x, (int)y, width, height, null);
+		//x and y determine the 
+		g.drawImage(Assets.player, (int) (x - game.getGameCamera().getxOffset()), (int) (y - game.getGameCamera().getyOffset()), width, height, null);
 		
 	}
 

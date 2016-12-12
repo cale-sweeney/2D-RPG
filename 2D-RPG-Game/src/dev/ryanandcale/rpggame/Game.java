@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 
 import dev.ryanandcale.rpggame.display.Display;
 import dev.ryanandcale.rpggame.gfx.Assets;
+import dev.ryanandcale.rpggame.gfx.GameCamera;
 import dev.ryanandcale.rpggame.gfx.ImageLoader;
 import dev.ryanandcale.rpggame.gfx.SpriteSheet;
 import dev.ryanandcale.rpggame.input.KeyManager;
@@ -18,7 +19,7 @@ public class Game implements Runnable{
 
 	private Display display;
 
-	public int width, height;
+	private int width, height;
 	public String title;
 	
 	private boolean running = false;
@@ -33,6 +34,9 @@ public class Game implements Runnable{
 	
 	//Input
 	private KeyManager keyManager;
+	
+	//Camera 
+	private GameCamera gameCamera;
 	
 	//private BufferedImage test;
 	//private SpriteSheet sheet;
@@ -52,6 +56,9 @@ public class Game implements Runnable{
 		//test = ImageLoader.loadImage("/textures/SpriteSheet1.jpg");
 		//sheet = new SpriteSheet(test);
 		Assets.init();
+		
+		gameCamera = new GameCamera(this, 0, 0);
+		
 		gameState = new GameState(this);
 		menuState = new MenuState(this);
 		State.setState(gameState);
@@ -148,6 +155,19 @@ public class Game implements Runnable{
 		return keyManager;
 	}
 	
+	
+	public GameCamera getGameCamera(){
+		return gameCamera;
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
 	public synchronized void start(){
 		if(running) //check to see if its already running
 			return; //if it is running, don't re-run

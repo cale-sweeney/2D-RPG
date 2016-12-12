@@ -2,16 +2,20 @@ package dev.ryanandcale.rpggame.worlds;
 
 import java.awt.Graphics;
 
+import dev.ryanandcale.rpggame.Game;
 import dev.ryanandcale.rpggame.tiles.Tile;
 import dev.ryanandcale.rpggame.utils.Utils;
 
 public class World {
 	
+	private Game game;
 	private int width, height;
 	private int spawnX, spawnY;
 	private int[][] tiles; //integer multi-dimensional array
 
-	public World(String path) {
+	//World object takes in a Game object and path to the world text file
+	public World(Game game, String path) {
+		this.game = game;
 		loadWorld(path);
 	}
 
@@ -23,7 +27,8 @@ public class World {
 	public void render(Graphics g){
 		for(int y = 0; y < height; y++){
 			for(int x = 0; x < width; x++){
-				getTile(x,y).render(g, x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT);
+				getTile(x,y).render(g, (int) (x * Tile.TILEWIDTH - game.getGameCamera().getxOffset()), 
+						(int) (y * Tile.TILEHEIGHT - game.getGameCamera().getyOffset()));
 			}
 		}
 	}
