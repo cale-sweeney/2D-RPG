@@ -3,6 +3,7 @@ package dev.ryanandcale.rpggame.states;
 import java.awt.Graphics;
 
 import dev.ryanandcale.rpggame.Game;
+import dev.ryanandcale.rpggame.Handler;
 import dev.ryanandcale.rpggame.entities.creatures.Player;
 import dev.ryanandcale.rpggame.gfx.Assets;
 import dev.ryanandcale.rpggame.tiles.Tile;
@@ -13,10 +14,12 @@ public class GameState extends State{
 	private Player player;
 	private World world;
 	
-	public GameState(Game game){
-		super(game);
-		player = new Player(game,100,100);
-		world = new World(game, "res/worlds/world1.txt");
+	public GameState(Handler handler){
+		super(handler);
+		world = new World(handler, "res/worlds/world1.txt");
+		handler.setWorld(world);
+		player = new Player(handler,100,100);
+		
 		
 		//game.getGameCamera().move(100, 200); //controls where the game camera starts
 	}

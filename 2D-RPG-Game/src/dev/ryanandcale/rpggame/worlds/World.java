@@ -3,19 +3,20 @@ package dev.ryanandcale.rpggame.worlds;
 import java.awt.Graphics;
 
 import dev.ryanandcale.rpggame.Game;
+import dev.ryanandcale.rpggame.Handler;
 import dev.ryanandcale.rpggame.tiles.Tile;
 import dev.ryanandcale.rpggame.utils.Utils;
 
 public class World {
 	
-	private Game game;
+	private Handler handler;
 	private int width, height;
 	private int spawnX, spawnY;
 	private int[][] tiles; //integer multi-dimensional array
 
 	//World object takes in a Game object and path to the world text file
-	public World(Game game, String path) {
-		this.game = game;
+	public World(Handler handler, String path) {
+		this.handler = handler;
 		loadWorld(path);
 	}
 
@@ -28,20 +29,25 @@ public class World {
 		
 		//These four calculations are asking: Is zero greater than our game camera's offset?
 		//The goal is to reduce the amount of rendering that is done to only what the user can see.
-		int xStart = (int) Math.max(0, game.getGameCamera().getxOffset() / Tile.TILEWIDTH); //don't want this to go negative, hence using max
-		int xEnd = (int) Math.min(width, (game.getGameCamera().getxOffset() + game.getWidth()) / Tile.TILEWIDTH + 1);
-		int yStart = (int) Math.max(0, game.getGameCamera().getyOffset() / Tile.TILEHEIGHT);
-		int yEnd = (int) Math.min(height, (game.getGameCamera().getyOffset() + game.getHeight()) / Tile.TILEHEIGHT + 1);
+		int xStart = (int) Math.max(0, handler.getGameCamera().getxOffset() / Tile.TILEWIDTH); //don't want this to go negative, hence using max
+		int xEnd = (int) Math.min(width, (handler.getGameCamera().getxOffset() + handler.getWidth()) / Tile.TILEWIDTH + 1);
+		int yStart = (int) Math.max(0, handler.getGameCamera().getyOffset() / Tile.TILEHEIGHT);
+		int yEnd = (int) Math.min(height, (handler.getGameCamera().getyOffset() + handler.getHeight()) / Tile.TILEHEIGHT + 1);
 		
 		for(int y = yStart; y < yEnd; y++){ ////tiles from the top of the user's view to the tile on the bottom of the user's view
 			for(int x = xStart; x < xEnd; x++){ //tiles from the far left of the user's view to the tile on the far right of the user's view
-				getTile(x,y).render(g, (int) (x * Tile.TILEWIDTH - game.getGameCamera().getxOffset()), 
-						(int) (y * Tile.TILEHEIGHT - game.getGameCamera().getyOffset()));
+				getTile(x,y).render(g, (int) (x * Tile.TILEWIDTH - handler.getGameCamera().getxOffset()), 
+						(int) (y * Tile.TILEHEIGHT - handler.getGameCamera().getyOffset()));
 			}
 		}
 	}
 	
 	public Tile getTile(int x, int y){
+		
+		//if we are out of bounds of the map
+		if(x < 0 || y < 0 || x >= width || y >= height)
+			return Tile.grassTile;
+		
 		Tile t = Tile.tiles[tiles[x][y]];
 		if(t == null)
 			return Tile.dirtTile;

@@ -1,7 +1,9 @@
 package dev.ryanandcale.rpggame.entities.creatures;
 
 import dev.ryanandcale.rpggame.Game;
+import dev.ryanandcale.rpggame.Handler;
 import dev.ryanandcale.rpggame.entities.Entity;
+import dev.ryanandcale.rpggame.tiles.Tile;
 
 public abstract class Creature extends Entity {
 
@@ -14,8 +16,8 @@ public abstract class Creature extends Entity {
 	protected float speed;
 	protected float xMove, yMove;
 	
-	public Creature(Game game, float x, float y, int width, int height) {
-		super(game, x, y, width, height); //passes the x, y, width, height along to the Entity class
+	public Creature(Handler handler, float x, float y, int width, int height) {
+		super(handler, x, y, width, height); //passes the x, y, width, height along to the Entity class
 		health = DEFAULT_HEALTH;
 		speed = DEFAULT_SPEED;
 		xMove = 0;  //x-coordinate on the screen of the creature
@@ -23,8 +25,59 @@ public abstract class Creature extends Entity {
 	}
 
 	public void move(){
-		x += xMove;
-		y += yMove;
+		moveX();
+		moveY();
+		
+	}
+	
+	//move the creature left and right
+	public void moveX(){
+		if(xMove > 0){ //Moving right
+			
+			//what ever tile we are trying to move into, if it is not solid, we are good to move
+			int tx = (int)( x + xMove + bounds.x + bounds.width) / Tile.TILEWIDTH;
+			
+			if(!collisionWithTile(tx, (int) (y + bounds.y) / Tile.TILEHEIGHT) &&
+					!collisionWithTile(tx, (int) (y + bounds.y + bounds.height) / Tile.TILEHEIGHT)){
+				x += xMove;
+			}
+			
+			
+		}else if(xMove < 0){ //moving left
+			
+			int tx = (int)( x + xMove + bounds.x) / Tile.TILEWIDTH;
+			
+			if(!collisionWithTile(tx, (int) (y + bounds.y) / Tile.TILEHEIGHT) &&
+					!collisionWithTile(tx, (int) (y + bounds.y + bounds.height) / Tile.TILEHEIGHT)){
+				x += xMove;
+			}
+			
+		}
+	}
+	
+	//move the creature up and down
+	public void moveY(){
+		if(yMove < 0){ //Moving up
+			int ty = (int) (y + yMove + bounds.y) / Tile.TILEHEIGHT; //top portion of our bounding rectangle
+			
+			if(!collisionWithTile((int) (x + bounds.x) /Tile.TILEWIDTH, ty ) &&  //upper lefthand corner of the bounding rectangle
+					!collisionWithTile((int) (x + bounds.x + bounds.width) /Tile.TILEWIDTH, ty )){
+				y += yMove;
+			} 
+			
+		}else if (yMove > 0){ //Moving down
+			int ty = (int) (y + yMove + bounds.y + bounds.height) / Tile.TILEHEIGHT; //lower portion of our bounding rectangle
+			
+			if(!collisionWithTile((int) (x + bounds.x) /Tile.TILEWIDTH, ty ) &&
+					!collisionWithTile((int) (x + bounds.x + bounds.width) /Tile.TILEWIDTH, ty )){
+				y += yMove;
+			} 
+			
+		}
+	}
+	
+	protected boolean collisionWithTile(int x, int y){
+		return handler.getWorld().getTile(x, y).isSolid();
 	}
 	
 	//GETTERS & SETTERS

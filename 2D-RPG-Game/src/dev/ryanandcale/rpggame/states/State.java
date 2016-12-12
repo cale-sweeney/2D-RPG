@@ -3,6 +3,7 @@ package dev.ryanandcale.rpggame.states;
 import java.awt.Graphics;
 
 import dev.ryanandcale.rpggame.Game;
+import dev.ryanandcale.rpggame.Handler;
 
 public abstract class State {
 
@@ -19,10 +20,10 @@ public abstract class State {
 	
 	//CLASS
 	
-	protected Game game;
+	protected Handler handler;
 	
-	public State(Game game){
-		this.game = game;
+	public State(Handler handler){
+		this.handler = handler;
 	}
 	
 	public abstract void tick();

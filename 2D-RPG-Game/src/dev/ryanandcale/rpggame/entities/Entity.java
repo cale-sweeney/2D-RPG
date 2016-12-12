@@ -1,22 +1,27 @@
 package dev.ryanandcale.rpggame.entities;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 import dev.ryanandcale.rpggame.Game;
+import dev.ryanandcale.rpggame.Handler;
 
 public abstract class Entity {
 	
 	//private variable, but classes that extend this class also has access
-	protected Game game;
+	protected Handler handler;
 	protected float x, y;
 	protected int width, height; //size of the entity
+	protected Rectangle bounds;
 	
-	public Entity(Game game, float x, float y, int width, int height){
-		this.game = game;
+	public Entity(Handler handler, float x, float y, int width, int height){
+		this.handler = handler;
 		this.x = x; //entity's x position on the screen
 		this.y = y; //entity's y position on the screen
 		this.width = width;
 		this.height = height;
+		
+		bounds = new Rectangle(0, 0, width, height); //for collision detection
 	}
 	
 	public abstract void tick();
