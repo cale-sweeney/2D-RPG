@@ -58,11 +58,11 @@ public class Player extends Creature{
 		//x and y determine the 
 		g.drawImage(Assets.player, (int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), width, height, null);
 		
-		//boundary collision box
-		g.setColor(Color.red);
+		//red boundary collision box
+/*		g.setColor(Color.red);
 		g.fillRect((int) (x + bounds.x - handler.getGameCamera().getxOffset()),
 				(int) (y + bounds.y - handler.getGameCamera().getyOffset()),
-				bounds.width, bounds.height);
+				bounds.width, bounds.height);*/
 		
 	}
 

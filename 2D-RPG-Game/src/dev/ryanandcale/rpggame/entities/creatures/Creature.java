@@ -40,6 +40,12 @@ public abstract class Creature extends Entity {
 			if(!collisionWithTile(tx, (int) (y + bounds.y) / Tile.TILEHEIGHT) &&
 					!collisionWithTile(tx, (int) (y + bounds.y + bounds.height) / Tile.TILEHEIGHT)){
 				x += xMove;
+			}else{ //there was a collision
+				//allows are player to stand flush against a tile 
+				//there will be a few pixels of gap without this code
+				//-1 allows us to move up and down while flush, creating 1 pixel of space
+				x = tx * Tile.TILEWIDTH - bounds.x - bounds.width -1; 
+				
 			}
 			
 			
@@ -50,6 +56,9 @@ public abstract class Creature extends Entity {
 			if(!collisionWithTile(tx, (int) (y + bounds.y) / Tile.TILEHEIGHT) &&
 					!collisionWithTile(tx, (int) (y + bounds.y + bounds.height) / Tile.TILEHEIGHT)){
 				x += xMove;
+			}else{
+				//allows player to move flush with solid objects
+				x = tx * Tile.TILEWIDTH + Tile.TILEWIDTH - bounds.x;
 			}
 			
 		}
@@ -63,7 +72,9 @@ public abstract class Creature extends Entity {
 			if(!collisionWithTile((int) (x + bounds.x) /Tile.TILEWIDTH, ty ) &&  //upper lefthand corner of the bounding rectangle
 					!collisionWithTile((int) (x + bounds.x + bounds.width) /Tile.TILEWIDTH, ty )){
 				y += yMove;
-			} 
+			} else { //there was a collision, allow the player to be flush with solid object
+				y = ty * Tile.TILEHEIGHT + Tile.TILEHEIGHT - bounds.y;
+			}
 			
 		}else if (yMove > 0){ //Moving down
 			int ty = (int) (y + yMove + bounds.y + bounds.height) / Tile.TILEHEIGHT; //lower portion of our bounding rectangle
@@ -71,7 +82,9 @@ public abstract class Creature extends Entity {
 			if(!collisionWithTile((int) (x + bounds.x) /Tile.TILEWIDTH, ty ) &&
 					!collisionWithTile((int) (x + bounds.x + bounds.width) /Tile.TILEWIDTH, ty )){
 				y += yMove;
-			} 
+			} else { //there was a collision, allow the player to be flush with the solid object
+				y = ty * Tile.TILEHEIGHT - bounds.y - bounds.height - 1; //-1 to allow sliding will flush with a solid object
+			}
 			
 		}
 	}
