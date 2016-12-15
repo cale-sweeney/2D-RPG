@@ -35,11 +35,11 @@ public class Game implements Runnable{
 	//Input
 	private KeyManager keyManager;
 	
+	//Handler
+	private Handler handler;	
+	
 	//Camera 
 	private GameCamera gameCamera;
-	
-	//Handler
-	private Handler handler;
 	
 	//private BufferedImage test;
 	//private SpriteSheet sheet;
@@ -60,8 +60,9 @@ public class Game implements Runnable{
 		//sheet = new SpriteSheet(test);
 		Assets.init();
 		
-		gameCamera = new GameCamera(this, 0, 0);
 		handler = new Handler(this);
+		gameCamera = new GameCamera(handler, 0, 0);
+
 		
 		gameState = new GameState(handler);
 		menuState = new MenuState(handler);
