@@ -11,6 +11,7 @@ import dev.ryanandcale.rpggame.gfx.GameCamera;
 import dev.ryanandcale.rpggame.gfx.ImageLoader;
 import dev.ryanandcale.rpggame.gfx.SpriteSheet;
 import dev.ryanandcale.rpggame.input.KeyManager;
+import dev.ryanandcale.rpggame.input.MouseManager;
 import dev.ryanandcale.rpggame.states.GameState;
 import dev.ryanandcale.rpggame.states.MenuState;
 import dev.ryanandcale.rpggame.states.State;
@@ -29,11 +30,12 @@ public class Game implements Runnable{
 	private Graphics g; //draws images to the canvas
 	
 	//States
-	private State gameState;
-	private State menuState;
+	public State gameState;
+	public State menuState;
 	
 	//Input
 	private KeyManager keyManager;
+	private MouseManager mouseManager;
 	
 	//Handler
 	private Handler handler;	
@@ -41,14 +43,12 @@ public class Game implements Runnable{
 	//Camera 
 	private GameCamera gameCamera;
 	
-	//private BufferedImage test;
-	//private SpriteSheet sheet;
-	
 	public Game(String title, int width, int height){
 		this.width = width;
 		this.height = height;
 		this.title = title;
 		keyManager = new KeyManager();
+		mouseManager = new MouseManager();
 		
 	}
 	
@@ -56,8 +56,11 @@ public class Game implements Runnable{
 	private void init(){
 		display = new Display(title, width, height);
 		display.getFrame().addKeyListener(keyManager);
-		//test = ImageLoader.loadImage("/textures/SpriteSheet1.jpg");
-		//sheet = new SpriteSheet(test);
+		display.getFrame().addMouseListener(mouseManager);
+		display.getFrame().addMouseMotionListener(mouseManager);
+		display.getCanvas().addMouseListener(mouseManager);
+		display.getCanvas().addMouseMotionListener(mouseManager);
+		
 		Assets.init();
 		
 		handler = new Handler(this);
@@ -66,7 +69,7 @@ public class Game implements Runnable{
 		
 		gameState = new GameState(handler);
 		menuState = new MenuState(handler);
-		State.setState(gameState);
+		State.setState(menuState);
 	}
 	
 
@@ -158,6 +161,10 @@ public class Game implements Runnable{
 	//So other classes can access the keyManager
 	public KeyManager getKeyManager(){
 		return keyManager;
+	}
+	
+	public MouseManager getMouseManager(){
+		return mouseManager;
 	}
 	
 	

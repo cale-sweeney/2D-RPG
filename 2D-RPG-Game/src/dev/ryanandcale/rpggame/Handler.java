@@ -2,6 +2,7 @@ package dev.ryanandcale.rpggame;
 
 import dev.ryanandcale.rpggame.gfx.GameCamera;
 import dev.ryanandcale.rpggame.input.KeyManager;
+import dev.ryanandcale.rpggame.input.MouseManager;
 import dev.ryanandcale.rpggame.worlds.World;
 
 public class Handler {
@@ -20,6 +21,10 @@ public class Handler {
 	
 	public KeyManager getKeyManager(){
 		return game.getKeyManager();
+	}
+	
+	public MouseManager getMouseManager(){
+		return game.getMouseManager();
 	}
 
 	public int getWidth(){

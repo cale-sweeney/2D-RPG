@@ -2,6 +2,7 @@ package dev.ryanandcale.rpggame.entities;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import dev.ryanandcale.rpggame.Handler;
 import dev.ryanandcale.rpggame.entities.creatures.Player;
@@ -11,6 +12,15 @@ public class EntityManager {
 	private Handler handler;
 	private Player player;
 	private ArrayList<Entity> entities;
+	private Comparator<Entity> renderSorter = new Comparator<Entity>(){	
+		@Override
+		public int compare(Entity a, Entity b){			
+			//check the bottom of the y coordinate of our entities (e.g. foot of the tree and foot of the player)
+			if(a.getY() + a.getHeight() < b.getY() + b.getHeight())  
+				return -1; //b should be rendered after a
+			return 1; //a should be rendered after b
+		}
+	};	
 	
 	public EntityManager(Handler handler, Player player) {
 		this.handler = handler;
@@ -24,6 +34,7 @@ public class EntityManager {
 			Entity e = entities.get(i);
 			e.tick();
 		}
+		entities.sort(renderSorter);
 	}
 	
 	public void render(Graphics g){
