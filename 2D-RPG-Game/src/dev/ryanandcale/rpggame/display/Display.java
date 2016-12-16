@@ -1,6 +1,7 @@
 package dev.ryanandcale.rpggame.display;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
@@ -34,6 +35,7 @@ public class Display {
 		canvas.setMaximumSize(new Dimension(width, height));
 		canvas.setMinimumSize(new Dimension(width, height));
 		canvas.setFocusable(false);
+		canvas.setBackground(Color.darkGray);
 		
 		frame.add(canvas);
 		frame.pack();  //resize the window slightly so we can see the canvas entirely

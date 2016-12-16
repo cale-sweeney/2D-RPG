@@ -14,7 +14,7 @@ public class Assets {
 	
 	
 	public static void init(){
-		SpriteSheet masterSheet = new SpriteSheet(ImageLoader.loadImage("/textures/MasterSheet.png"));
+		SpriteSheet masterSheet = new SpriteSheet(ImageLoader.loadImage("/textures/MasterSheetv3.png"));
 	
 		
 		player_down = new BufferedImage[3];
