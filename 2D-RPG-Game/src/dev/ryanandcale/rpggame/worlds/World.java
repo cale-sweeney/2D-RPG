@@ -4,6 +4,9 @@ import java.awt.Graphics;
 
 import dev.ryanandcale.rpggame.Game;
 import dev.ryanandcale.rpggame.Handler;
+import dev.ryanandcale.rpggame.entities.EntityManager;
+import dev.ryanandcale.rpggame.entities.creatures.Player;
+import dev.ryanandcale.rpggame.entities.statics.Tree;
 import dev.ryanandcale.rpggame.tiles.Tile;
 import dev.ryanandcale.rpggame.utils.Utils;
 
@@ -13,16 +16,27 @@ public class World {
 	private int width, height;
 	private int spawnX, spawnY;
 	private int[][] tiles; //integer multi-dimensional array
+	//Entities
+	private EntityManager entityManager;
 
 	//World object takes in a Game object and path to the world text file
 	public World(Handler handler, String path) {
 		this.handler = handler;
+		entityManager = new EntityManager(handler, new Player(handler, 100, 100));
+		entityManager.addEntity(new Tree(handler, 100, 250));
+		entityManager.addEntity(new Tree(handler, 100, 350));
+		entityManager.addEntity(new Tree(handler, 100, 450));
+		
+		
 		loadWorld(path);
+		
+		entityManager.getPlayer().setX(spawnX);//player starting position
+		entityManager.getPlayer().setY(spawnY);//player starting position
 	}
 
 	//to update all the positions of tiles
 	public void tick(){
-		
+		entityManager.tick();
 	}
 	
 	public void render(Graphics g){
@@ -40,6 +54,9 @@ public class World {
 						(int) (y * Tile.TILEHEIGHT - handler.getGameCamera().getyOffset()));
 			}
 		}
+		//Entities
+		entityManager.render(g); //render all of the entities
+		
 	}
 	
 	public Tile getTile(int x, int y){
