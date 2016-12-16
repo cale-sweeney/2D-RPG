@@ -19,6 +19,7 @@ public class World {
 	//Entities
 	private EntityManager entityManager;
 
+
 	//World object takes in a Game object and path to the world text file
 	public World(Handler handler, String path) {
 		this.handler = handler;
@@ -105,6 +106,8 @@ public class World {
 		
 	}
 
+	//GETTERS & SETTERS
+	
 	public int getWidth() {
 		return width;
 	}
@@ -113,5 +116,9 @@ public class World {
 		return height;
 	}
 	
+	public EntityManager getEntityManager() {
+		return entityManager;
+	}
+
 	
 }

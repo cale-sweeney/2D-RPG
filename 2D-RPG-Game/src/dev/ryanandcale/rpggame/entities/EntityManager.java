@@ -16,7 +16,7 @@ public class EntityManager {
 		this.handler = handler;
 		this.player = player;
 		entities = new ArrayList<Entity>(); //ArrayList allows you to add and remove as many entities as you want to.  No resizing necessity.
-		
+		addEntity(player); //add your player to the entity array
 	}
 	
 	public void tick(){
@@ -24,14 +24,12 @@ public class EntityManager {
 			Entity e = entities.get(i);
 			e.tick();
 		}
-		player.tick();
 	}
 	
 	public void render(Graphics g){
 		for(Entity e : entities){
 			e.render(g);
 		}
-		player.render(g);
 	}
 
 	public void addEntity(Entity e){

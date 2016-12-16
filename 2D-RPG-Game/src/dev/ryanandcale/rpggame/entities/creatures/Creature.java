@@ -24,9 +24,14 @@ public abstract class Creature extends Entity {
 		yMove = 0; //y-coordinate on the screen of the creature
 	}
 
+	//We have not changed our X or Y position yet, 
+	//so we have to use the offset to tell the collision box
+	//where we are moving to
 	public void move(){
-		moveX();
-		moveY();
+		if(!checkEntityCollisions(xMove, 0f))
+			moveX();
+		if(!checkEntityCollisions(0f, yMove))
+			moveY();
 		
 	}
 	

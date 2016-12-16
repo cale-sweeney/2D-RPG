@@ -27,6 +27,25 @@ public abstract class Entity {
 	public abstract void tick();
 	
 	public abstract void render(Graphics g);
+	
+	//this method tests every entity in our game and sees if it collides with another
+	public boolean checkEntityCollisions(float xOffset, float yOffset){
+		for(Entity e : handler.getWorld().getEntityManager().getEntities()){
+			if(e.equals(this)) //don't check collisions with yourself
+				continue;
+			if(e.getCollisionBounds(0f, 0f).intersects(getCollisionBounds(xOffset, yOffset))) //if it intersects our collision bounds
+				return true;
+		}
+		return false;
+	}
+	
+	public Rectangle getCollisionBounds(float xOffset, float yOffset){
+		//x is the position of the entity
+		//plus the bounding box xoffset of the entity or bounds.x
+		//same for y
+		//then the width of the bounding box and the height of the bounding box bounds.width and bounds.height
+		return new Rectangle((int)(x + bounds.x + xOffset), (int) (y + bounds.y + yOffset), bounds.width, bounds.height);
+	}
 
 	public float getX() {
 		return x;
