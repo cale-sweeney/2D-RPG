@@ -12,9 +12,11 @@ public class Assets {
 	public static BufferedImage[] player_left;
 	public static BufferedImage[] player_right;
 	
+	public static BufferedImage[] btn_start;
 	
 	public static void init(){
 		SpriteSheet masterSheet = new SpriteSheet(ImageLoader.loadImage("/textures/MasterSheetv3.png"));
+		SpriteSheet startButtonSheet = new SpriteSheet(ImageLoader.loadImage("/textures/MenuStartButton.png"));
 	
 		
 		player_down = new BufferedImage[3];
@@ -45,6 +47,11 @@ public class Assets {
 		grass = masterSheet.crop(100, 100, height, width);
 		rock = masterSheet.crop(200, 100, height, width);
 		tree = masterSheet.crop(300, 0, height * 2, width);
+		
+		btn_start = new BufferedImage[2];
+		
+		btn_start[0] = startButtonSheet.crop(0, 0, 150, 300);
+		btn_start[1] = startButtonSheet.crop(0, 150, 150, 300);
 	}
 	
 }
