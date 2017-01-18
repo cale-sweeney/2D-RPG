@@ -9,9 +9,12 @@ import dev.ryanandcale.rpggame.Handler;
 public abstract class Entity {
 	
 	//private variable, but classes that extend this class also has access
+	public static final int DEFAULT_HEALTH = 10;
 	protected Handler handler;
 	protected float x, y;
 	protected int width, height; //size of the entity
+	protected int health;
+	protected boolean active = true;
 	protected Rectangle bounds;
 	
 	public Entity(Handler handler, float x, float y, int width, int height){
@@ -20,6 +23,7 @@ public abstract class Entity {
 		this.y = y; //entity's y position on the screen
 		this.width = width;
 		this.height = height;
+		health = DEFAULT_HEALTH;
 		
 		bounds = new Rectangle(0, 0, width, height); //for collision detection
 	}
@@ -27,6 +31,16 @@ public abstract class Entity {
 	public abstract void tick();
 	
 	public abstract void render(Graphics g);
+	
+	public abstract void die();
+	
+	public void hurt(int amt){
+		health -= amt;
+		if(health <= 0){
+			active = false;
+			die();
+		}
+	}
 	
 	//this method tests every entity in our game and sees if it collides with another
 	public boolean checkEntityCollisions(float xOffset, float yOffset){
@@ -81,6 +95,22 @@ public abstract class Entity {
 	 */
 	public void setHeight(int height) {
 		this.height = height;
+	}
+
+	public int getHealth() {
+		return health;
+	}
+
+	public void setHealth(int health) {
+		this.health = health;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 }

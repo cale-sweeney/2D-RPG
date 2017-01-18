@@ -2,10 +2,12 @@ package dev.ryanandcale.rpggame.entities.creatures;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import dev.ryanandcale.rpggame.Game;
 import dev.ryanandcale.rpggame.Handler;
+import dev.ryanandcale.rpggame.entities.Entity;
 import dev.ryanandcale.rpggame.gfx.Animation;
 import dev.ryanandcale.rpggame.gfx.Assets;
 
@@ -13,6 +15,8 @@ public class Player extends Creature{
 	
 	//Animations
 	private Animation animDown, animUp, animLeft, animRight;
+	//Attack timer
+	private long lastAttackTimer, attackCooldown = 800, attackTimer = attackCooldown;
 	
 	
 	public Player(Handler handler, float x, float y) {
@@ -37,21 +41,63 @@ public class Player extends Creature{
 		animUp.tick();
 		animLeft.tick();
 		animRight.tick();
+		
 		//Movement
 		getInput();
 		move();
 		handler.getGameCamera().centerOnEntity(this); //center the camera on this player after he moves
-
-		//old-style of moving, now in getInput()
-/*		if(game.getKeyManager().up)
-			y -= 3;
-		if(game.getKeyManager().down)
-			y += 3;
-		if(game.getKeyManager().left)
-			x -= 3;
-		if(game.getKeyManager().right)
-			x += 3;*/
 		
+		//Attack
+		checkAttacks();
+
+		
+	}
+	
+	private void checkAttacks(){
+		attackTimer += System.currentTimeMillis() - lastAttackTimer; //time elapsed since last attack
+		lastAttackTimer = System.currentTimeMillis();
+		if(attackTimer < attackCooldown){ //is the player eligible to attack?
+			return; //skip the code below, not ready to attack
+		}
+		
+		Rectangle cb = getCollisionBounds(0,0);
+		Rectangle ar = new Rectangle();
+		int arSize = 20;
+		ar.width = arSize;
+		ar.height = arSize;
+		
+		if(handler.getKeyManager().aUp){
+			ar.x = cb.x + cb.width / 2 - arSize / 2; //set the collision rectangle width of the player
+			ar.y = cb.y - arSize; //set the collision rectangle height of the player
+		}else if(handler.getKeyManager().aDown){
+			ar.x = cb.x + cb.width / 2 - arSize / 2;
+			ar.y = cb.y + cb.height;
+		}else if(handler.getKeyManager().aLeft){
+			ar.x = cb.x - arSize; 
+			ar.y = cb.y + cb.height / 2 - arSize / 2;
+		}else if(handler.getKeyManager().aRight){
+			ar.x = cb.x + cb.width; 
+			ar.y = cb.y + cb.height / 2 - arSize / 2; 
+		}else{
+			return; //not attacking, just return
+		}
+		
+		attackTimer = 0; //set the attack timer to zero because our player will attack
+		
+		//check for the attack
+		for(Entity e : handler.getWorld().getEntityManager().getEntities()){
+			if(e.equals(this)) //if the entity is our own player, ignore
+				continue; //skip the rest of the loop
+			if(e.getCollisionBounds(0, 0).intersects(ar)){
+				e.hurt(1); //hurt the enemy
+				return;
+			}
+		}
+	}
+	
+	@Override
+	public void die(){
+		System.out.println("You lose");
 	}
 	
 	private void getInput(){
