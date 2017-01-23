@@ -9,7 +9,7 @@ import dev.ryanandcale.rpggame.Handler;
 public abstract class Entity {
 	
 	//private variable, but classes that extend this class also has access
-	public static final int DEFAULT_HEALTH = 10;
+	public static final int DEFAULT_HEALTH = 3;
 	protected Handler handler;
 	protected float x, y;
 	protected int width, height; //size of the entity

@@ -6,7 +6,7 @@ public class Assets {
 
 	private static final int width = 100, height = 100;
 	
-	public static BufferedImage bush, agave, grass, dirt, rock, tree;
+	public static BufferedImage bush, agave, grass, dirt, rock, tree, wood, stone;
 	public static BufferedImage[] player_down;
 	public static BufferedImage[] player_up;
 	public static BufferedImage[] player_left;
@@ -15,9 +15,12 @@ public class Assets {
 	public static BufferedImage[] btn_start;
 	
 	public static void init(){
-		SpriteSheet masterSheet = new SpriteSheet(ImageLoader.loadImage("/textures/MasterSheetv3.png"));
+		SpriteSheet masterSheet = new SpriteSheet(ImageLoader.loadImage("/textures/MasterSheetv4.png"));
 		SpriteSheet startButtonSheet = new SpriteSheet(ImageLoader.loadImage("/textures/MenuStartButton.png"));
 	
+		wood = masterSheet.crop(300, 200, width, height);
+		stone = masterSheet.crop(300, 300, width, height);
+		
 		
 		player_down = new BufferedImage[3];
 		player_up = new BufferedImage[3];

@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 import dev.ryanandcale.rpggame.Handler;
 import dev.ryanandcale.rpggame.gfx.Assets;
+import dev.ryanandcale.rpggame.items.Item;
 import dev.ryanandcale.rpggame.tiles.Tile;
 
 public class Tree extends StaticEntity {
@@ -25,7 +26,7 @@ public class Tree extends StaticEntity {
 	
 	@Override
 	public void die(){
-		
+		handler.getWorld().getItemManager().addItem(Item.woodItem.createNew((int) x, (int) y));
 	}
 
 	@Override
