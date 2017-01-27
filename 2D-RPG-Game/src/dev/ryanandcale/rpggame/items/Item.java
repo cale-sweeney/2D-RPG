@@ -1,6 +1,7 @@
 package dev.ryanandcale.rpggame.items;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import dev.ryanandcale.rpggame.Handler;
@@ -17,14 +18,16 @@ public class Item {
 	//Class
 	
 	//the size that items are rendered at in the game
-	public static final int ITEMWIDTH = 32, ITEMHEIGHT = 32, PICKED_UP = -1;
+	public static final int ITEMWIDTH = 32, ITEMHEIGHT = 32;
 	protected Handler handler;
 	protected BufferedImage texture;
 	protected String name; //name of the item
 	protected final int id; //id of the item
 	
+	protected Rectangle bounds;
+	
 	protected int x, y, count; //count stores the amount of an item, like 50 wood
-							   //if count becomes -1, add to player's inventory
+	protected boolean pickedUp = false;						   
 	
 
 	public Item(BufferedImage texture, String name, int id) {
@@ -32,13 +35,19 @@ public class Item {
 		this.name = name;
 		this.id = id;
 		count = 1;
+		
+		bounds = new Rectangle(x,y,ITEMWIDTH, ITEMHEIGHT);
 
 		items[id] = this;
 	}
 	
 	public void tick(){
-		
+		if(handler.getWorld().getEntityManager().getPlayer().getCollisionBounds(0f, 0f).intersects(bounds)){
+			pickedUp = true;
+			handler.getWorld().getEntityManager().getPlayer().getInventory().addItem(this);
+		}
 	}
+
 	
 	//if the item is being displayed in the game world
 	public void render(Graphics g){
@@ -64,6 +73,9 @@ public class Item {
 	public void setPosition(int x , int y ){
 		this.x = x;
 		this.y = y;
+		
+		bounds.x = x;
+		bounds.y = y;
 	}
 	
 	//GETTERS and SETTERS 
@@ -117,6 +129,14 @@ public class Item {
 
 	public int getId() {
 		return id;
+	}
+
+	public boolean isPickedUp() {
+		return pickedUp;
+	}
+
+	public void setPickedUp(boolean pickedUp) {
+		this.pickedUp = pickedUp;
 	}
 	
 

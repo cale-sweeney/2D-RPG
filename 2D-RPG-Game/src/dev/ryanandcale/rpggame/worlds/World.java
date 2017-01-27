@@ -6,6 +6,7 @@ import dev.ryanandcale.rpggame.Game;
 import dev.ryanandcale.rpggame.Handler;
 import dev.ryanandcale.rpggame.entities.EntityManager;
 import dev.ryanandcale.rpggame.entities.creatures.Player;
+import dev.ryanandcale.rpggame.entities.statics.Rock;
 import dev.ryanandcale.rpggame.entities.statics.Tree;
 import dev.ryanandcale.rpggame.items.ItemManager;
 import dev.ryanandcale.rpggame.tiles.Tile;
@@ -31,6 +32,9 @@ public class World {
 		entityManager.addEntity(new Tree(handler, 100, 250));
 		entityManager.addEntity(new Tree(handler, 100, 350));
 		entityManager.addEntity(new Tree(handler, 100, 450));
+		
+		entityManager.addEntity(new Rock(handler, 300, 450));
+		entityManager.addEntity(new Rock(handler, 400, 550));
 		
 		
 		loadWorld(path);

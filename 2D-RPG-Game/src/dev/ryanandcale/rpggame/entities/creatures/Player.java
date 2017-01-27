@@ -10,6 +10,7 @@ import dev.ryanandcale.rpggame.Handler;
 import dev.ryanandcale.rpggame.entities.Entity;
 import dev.ryanandcale.rpggame.gfx.Animation;
 import dev.ryanandcale.rpggame.gfx.Assets;
+import dev.ryanandcale.rpggame.inventory.Inventory;
 
 public class Player extends Creature{
 	
@@ -17,6 +18,8 @@ public class Player extends Creature{
 	private Animation animDown, animUp, animLeft, animRight;
 	//Attack timer
 	private long lastAttackTimer, attackCooldown = 800, attackTimer = attackCooldown;
+	//Player Inventory
+	private Inventory inventory;
 	
 	
 	public Player(Handler handler, float x, float y) {
@@ -32,6 +35,8 @@ public class Player extends Creature{
 		animUp = new Animation(500, Assets.player_up);
 		animLeft = new Animation(500, Assets.player_left);
 		animRight = new Animation(500, Assets.player_right);
+		
+		inventory = new Inventory(handler);
 	}
 
 	@Override
@@ -50,6 +55,8 @@ public class Player extends Creature{
 		//Attack
 		checkAttacks();
 
+		//Inventory
+		inventory.tick();
 		
 	}
 	
@@ -127,6 +134,9 @@ public class Player extends Creature{
 				(int) (y + bounds.y - handler.getGameCamera().getyOffset()),
 				bounds.width, bounds.height);*/
 		
+		inventory.render(g);
+		
+		
 	}
 	
 	private BufferedImage getCurrentAnimationFrame(){
@@ -139,6 +149,14 @@ public class Player extends Creature{
 		}else{ 
 			return animDown.getCurrentFrame();
 		}
+	}
+
+	public Inventory getInventory() {
+		return inventory;
+	}
+
+	public void setInventory(Inventory inventory) {
+		this.inventory = inventory;
 	}
 
 }
