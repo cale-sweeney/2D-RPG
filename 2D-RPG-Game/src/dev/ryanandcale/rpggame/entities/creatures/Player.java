@@ -1,11 +1,9 @@
 package dev.ryanandcale.rpggame.entities.creatures;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import dev.ryanandcale.rpggame.Game;
 import dev.ryanandcale.rpggame.Handler;
 import dev.ryanandcale.rpggame.entities.Entity;
 import dev.ryanandcale.rpggame.gfx.Animation;
@@ -14,8 +12,11 @@ import dev.ryanandcale.rpggame.inventory.Inventory;
 
 public class Player extends Creature{
 	
-	//Animations
+	//Movement Animations
 	private Animation animDown, animUp, animLeft, animRight;
+	//Attack Animations
+	private Animation animPunchLeft, animPunchRight;
+	
 	//Attack timer
 	private long lastAttackTimer, attackCooldown = 800, attackTimer = attackCooldown;
 	//Player Inventory
@@ -36,16 +37,23 @@ public class Player extends Creature{
 		animLeft = new Animation(500, Assets.player_left);
 		animRight = new Animation(500, Assets.player_right);
 		
+		animPunchLeft = new Animation(500, Assets.player_punch_left);
+		animPunchRight = new Animation(500, Assets.player_punch_right);
+		
 		inventory = new Inventory(handler);
 	}
 
 	@Override
 	public void tick() {
-		//Animations
+		//Movement Animations
 		animDown.tick();
 		animUp.tick();
 		animLeft.tick();
 		animRight.tick();
+		
+		//Attack Animations
+		animPunchLeft.tick();
+		animPunchRight.tick();
 		
 		//Movement
 		getInput();
@@ -108,6 +116,8 @@ public class Player extends Creature{
 	}
 	
 	private void getInput(){
+		
+		//Movement Input
 		xMove = 0;
 		yMove = 0;
 		
@@ -119,6 +129,17 @@ public class Player extends Creature{
 			xMove = -speed;
 		if(handler.getKeyManager().right)
 			xMove = speed;
+		
+		//Attack Input
+		leftAttack = false;
+		rightAttack = false;
+		
+		if(handler.getKeyManager().aLeft)
+			leftAttack = true;
+		if(handler.getKeyManager().aRight)
+			rightAttack = true;
+		
+		
 	}
 	
 
