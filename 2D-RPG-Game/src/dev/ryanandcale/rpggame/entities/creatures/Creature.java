@@ -15,24 +15,24 @@ public abstract class Creature extends Entity {
 	
 	protected float speed;
 	protected float xMove, yMove;
-	protected boolean leftAttack, rightAttack;
+	protected boolean attack;
 	
 	public Creature(Handler handler, float x, float y, int width, int height) {
 		super(handler, x, y, width, height); //passes the x, y, width, height along to the Entity class
 		speed = DEFAULT_SPEED;
 		xMove = 0;  //x-coordinate on the screen of the creature
 		yMove = 0; //y-coordinate on the screen of the creature
-		leftAttack = false;
-		rightAttack = false;
+		attack = false;
 	}
 
 	//We have not changed our X or Y position yet, 
 	//so we have to use the offset to tell the collision box
 	//where we are moving to
 	public void move(){
-		if(!checkEntityCollisions(xMove, 0f) && (!leftAttack && !rightAttack))
+		//Do not move if you are running into something or attacking
+		if(!checkEntityCollisions(xMove, 0f) && (!attack ))
 			moveX();
-		if(!checkEntityCollisions(0f, yMove)  && (!leftAttack && !rightAttack))
+		if(!checkEntityCollisions(0f, yMove)  && (!attack))
 			moveY();
 		
 	}

@@ -15,7 +15,7 @@ public class Player extends Creature{
 	//Movement Animations
 	private Animation animDown, animUp, animLeft, animRight;
 	//Attack Animations
-	private Animation animPunchLeft, animPunchRight;
+	private Animation animPunchLeft, animPunchRight, animPunchDown, animPunchUp;
 	
 	//Attack timer
 	private long lastAttackTimer, attackCooldown = 800, attackTimer = attackCooldown;
@@ -32,13 +32,17 @@ public class Player extends Creature{
 		bounds.width = 32;
 		bounds.height = 32;
 		
-		animDown = new Animation(500, Assets.player_down);
-		animUp = new Animation(500, Assets.player_up);
-		animLeft = new Animation(500, Assets.player_left);
-		animRight = new Animation(500, Assets.player_right);
+		//Movement Animation
+		animDown = new Animation(400, Assets.player_down);
+		animUp = new Animation(400, Assets.player_up);
+		animLeft = new Animation(400, Assets.player_left);
+		animRight = new Animation(400, Assets.player_right);
 		
-		animPunchLeft = new Animation(500, Assets.player_punch_left);
-		animPunchRight = new Animation(500, Assets.player_punch_right);
+		//Attack Animation
+		animPunchLeft = new Animation(150, Assets.player_punch_left);
+		animPunchRight = new Animation(150, Assets.player_punch_right);
+		animPunchDown = new Animation(150, Assets.player_punch_down);
+		animPunchUp = new Animation(150, Assets.player_punch_up);
 		
 		inventory = new Inventory(handler);
 	}
@@ -54,6 +58,8 @@ public class Player extends Creature{
 		//Attack Animations
 		animPunchLeft.tick();
 		animPunchRight.tick();
+		animPunchDown.tick();
+		animPunchUp.tick();
 		
 		//Movement
 		getInput();
@@ -131,14 +137,11 @@ public class Player extends Creature{
 			xMove = speed;
 		
 		//Attack Input
-		leftAttack = false;
-		rightAttack = false;
+		attack = false;
 		
-		if(handler.getKeyManager().aLeft)
-			leftAttack = true;
-		if(handler.getKeyManager().aRight)
-			rightAttack = true;
-		
+		if(handler.getKeyManager().aLeft || handler.getKeyManager().aRight || handler.getKeyManager().aDown || handler.getKeyManager().aUp)
+			attack = true;
+	
 		
 	}
 	
@@ -161,6 +164,22 @@ public class Player extends Creature{
 	}
 	
 	private BufferedImage getCurrentAnimationFrame(){
+		
+		//attack animations take priority over movement animations
+		if(attack){
+			if(handler.getKeyManager().aLeft){
+				return animPunchLeft.getCurrentFrame();
+			}else if(handler.getKeyManager().aRight){
+				return animPunchRight.getCurrentFrame();
+			}else if(handler.getKeyManager().aDown){
+				return animPunchDown.getCurrentFrame();
+			}else if(handler.getKeyManager().aUp){
+				return animPunchUp.getCurrentFrame();
+				
+			}	
+		}
+		
+		//movement animations
 		if(xMove < 0){
 			return animLeft.getCurrentFrame();
 		}else if(xMove > 0){

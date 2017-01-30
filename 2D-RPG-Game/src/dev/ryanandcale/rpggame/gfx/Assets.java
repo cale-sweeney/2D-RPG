@@ -7,18 +7,13 @@ public class Assets {
 	private static final int width = 100, height = 100; //classic default tile height and width
 	
 	public static BufferedImage bush, agave, grass, dirt, rock, tree, wood, stone;
-	public static BufferedImage[] player_down;
-	public static BufferedImage[] player_up;
-	public static BufferedImage[] player_left;
-	public static BufferedImage[] player_right;
-	
-	public static BufferedImage[] player_punch_left;
-	public static BufferedImage[] player_punch_right;
+	public static BufferedImage[] player_down, player_up, player_left, player_right;
+	public static BufferedImage[] player_punch_left, player_punch_right, player_punch_down, player_punch_up;
 	
 	public static BufferedImage[] btn_start;
 	
 	public static void init(){
-		SpriteSheet masterSheet = new SpriteSheet(ImageLoader.loadImage("/textures/MasterSheetv5.png"));
+		SpriteSheet masterSheet = new SpriteSheet(ImageLoader.loadImage("/textures/MasterSheetv8.png"));
 		SpriteSheet startButtonSheet = new SpriteSheet(ImageLoader.loadImage("/textures/MenuStartButton.png"));
 	
 		wood = masterSheet.crop(300, 200, width, height);
@@ -32,6 +27,8 @@ public class Assets {
 		
 		player_punch_right = new BufferedImage[3];
 		player_punch_left = new BufferedImage[3];
+		player_punch_down = new BufferedImage[3];
+		player_punch_up = new BufferedImage[3];
 		
 		player_down[0] = masterSheet.crop(0, 200, height, width);
 		player_down[1] = masterSheet.crop(100, 200, height, width);
@@ -56,6 +53,14 @@ public class Assets {
 		player_punch_left[2] = masterSheet.crop(0, 700, height, width);
 		player_punch_left[1] = masterSheet.crop(100, 700, height, width);
 		player_punch_left[0] = masterSheet.crop(200, 700, height, width);
+		
+		player_punch_down[0] = masterSheet.crop(300, 600, height, width);
+		player_punch_down[1] = masterSheet.crop(400, 600, height, width);
+		player_punch_down[2] = masterSheet.crop(500, 600, height, width);
+		
+		player_punch_up[0] = masterSheet.crop(300, 700, height, width);
+		player_punch_up[1] = masterSheet.crop(400, 700, height, width);
+		player_punch_up[2] = masterSheet.crop(500, 700, height, width);
 		
 		//player = masterSheet.crop(0, 0, height, width);
 		dirt = masterSheet.crop(0, 100, height, width);
