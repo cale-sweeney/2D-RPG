@@ -2,6 +2,7 @@ package dev.ryanandcale.rpggame.states;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 import dev.ryanandcale.rpggame.Game;
 import dev.ryanandcale.rpggame.Handler;

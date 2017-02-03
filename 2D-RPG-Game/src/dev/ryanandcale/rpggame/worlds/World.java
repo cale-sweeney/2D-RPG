@@ -6,6 +6,7 @@ import dev.ryanandcale.rpggame.Game;
 import dev.ryanandcale.rpggame.Handler;
 import dev.ryanandcale.rpggame.entities.EntityManager;
 import dev.ryanandcale.rpggame.entities.creatures.Player;
+import dev.ryanandcale.rpggame.entities.creatures.Werewolf;
 import dev.ryanandcale.rpggame.entities.statics.Rock;
 import dev.ryanandcale.rpggame.entities.statics.Tree;
 import dev.ryanandcale.rpggame.items.ItemManager;
@@ -35,6 +36,9 @@ public class World {
 		
 		entityManager.addEntity(new Rock(handler, 300, 450));
 		entityManager.addEntity(new Rock(handler, 400, 550));
+		
+		entityManager.addEntity(new Werewolf(handler, 600, 600));
+		entityManager.addEntity(new Werewolf(handler, 700, 700));
 		
 		
 		loadWorld(path);

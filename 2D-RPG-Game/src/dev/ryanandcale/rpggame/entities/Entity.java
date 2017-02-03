@@ -13,9 +13,11 @@ public abstract class Entity {
 	protected Handler handler;
 	protected float x, y;
 	protected int width, height; //size of the entity
+
 	protected int health;
 	protected boolean active = true;
-	protected Rectangle bounds;
+	protected Rectangle physicalBounds;
+	
 	
 	public Entity(Handler handler, float x, float y, int width, int height){
 		this.handler = handler;
@@ -25,7 +27,11 @@ public abstract class Entity {
 		this.height = height;
 		health = DEFAULT_HEALTH;
 		
-		bounds = new Rectangle(0, 0, width, height); //for collision detection
+		physicalBounds = new Rectangle(0, 0, width, height); //for collision detection
+		
+
+		
+		
 	}
 	
 	public abstract void tick();
@@ -58,7 +64,7 @@ public abstract class Entity {
 		//plus the bounding box xoffset of the entity or bounds.x
 		//same for y
 		//then the width of the bounding box and the height of the bounding box bounds.width and bounds.height
-		return new Rectangle((int)(x + bounds.x + xOffset), (int) (y + bounds.y + yOffset), bounds.width, bounds.height);
+		return new Rectangle((int)(x + physicalBounds.x + xOffset), (int) (y + physicalBounds.y + yOffset), physicalBounds.width, physicalBounds.height);
 	}
 
 	public float getX() {

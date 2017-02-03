@@ -3,6 +3,7 @@ package dev.ryanandcale.rpggame.entities.creatures;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 import dev.ryanandcale.rpggame.Handler;
 import dev.ryanandcale.rpggame.entities.Entity;
@@ -10,21 +11,24 @@ import dev.ryanandcale.rpggame.gfx.Animation;
 import dev.ryanandcale.rpggame.gfx.Assets;
 import dev.ryanandcale.rpggame.inventory.Inventory;
 
-public class Player extends Creature{
-	
+public class Werewolf extends Enemy {
+
 	//Movement Animations
-	private Animation animDown, animUp, animLeft, animRight;
+	private Animation animWerewolfDown, animWerewolfUp, animWerewolfLeft, animWerewolfRight;
+	
 	//Attack Animations
-	private Animation animPunchLeft, animPunchRight, animPunchDown, animPunchUp;
+	private Animation animWerewolfClawLeft, animWerewolfClawRight, animWerewolfClawDown, animWerewolfClawUp;
 	
 	//Attack timer
 	private long lastAttackTimer, attackCooldown = 800, attackTimer = attackCooldown;
-	//Player Inventory
-	private Inventory inventory;
 	
+	//to slow down movement
+	private int tickCounter;
 	
-	public Player(Handler handler, float x, float y) {
-		super(handler, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
+	public static int WEREWOLF_AWARENESS_RANGE = 500;
+
+	public Werewolf(Handler handler, float x, float y) {
+		super(handler, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT, WEREWOLF_AWARENESS_RANGE);
 		
 		//boundary collision
 		physicalBounds.x = 16;
@@ -33,44 +37,94 @@ public class Player extends Creature{
 		physicalBounds.height = 32;
 		
 		//Movement Animation
-		animDown = new Animation(400, Assets.player_down);
-		animUp = new Animation(400, Assets.player_up);
-		animLeft = new Animation(400, Assets.player_left);
-		animRight = new Animation(400, Assets.player_right);
+		animWerewolfDown = new Animation(400, Assets.werewolf_down);
+		animWerewolfUp = new Animation(400, Assets.werewolf_up);
+		animWerewolfLeft = new Animation(400, Assets.werewolf_left);
+		animWerewolfRight = new Animation(400, Assets.werewolf_right);
+		
+		this.tickCounter = 0;
 		
 		//Attack Animation
-		animPunchLeft = new Animation(150, Assets.player_punch_left);
-		animPunchRight = new Animation(150, Assets.player_punch_right);
-		animPunchDown = new Animation(150, Assets.player_punch_down);
-		animPunchUp = new Animation(150, Assets.player_punch_up);
-		
-		inventory = new Inventory(handler);
+		animWerewolfClawLeft = new Animation(150, Assets.werewolf_claw_left);
+		animWerewolfClawRight = new Animation(150, Assets.werewolf_claw_right);
+		animWerewolfClawDown = new Animation(150, Assets.werewolf_claw_down);
+		animWerewolfClawUp = new Animation(150, Assets.werewolf_claw_up);
+
 	}
 
 	@Override
 	public void tick() {
+		
+		tickCounter++;
+		
 		//Movement Animations
-		animDown.tick();
-		animUp.tick();
-		animLeft.tick();
-		animRight.tick();
+		animWerewolfDown.tick();
+		animWerewolfUp.tick();
+		animWerewolfLeft.tick();
+		animWerewolfRight.tick();
 		
 		//Attack Animations
-		animPunchLeft.tick();
-		animPunchRight.tick();
-		animPunchDown.tick();
-		animPunchUp.tick();
+		animWerewolfClawLeft.tick();
+		animWerewolfClawRight.tick();
+		animWerewolfClawDown.tick();
+		animWerewolfClawUp.tick();
 		
 		//Movement
-		getInput();
-		move();
-		handler.getGameCamera().centerOnEntity(this); //center the camera on this player after he moves
-		
+		if(tickCounter == 50){
+			enemyLooksForPlayer();
+			getEnemyWanderDirection();
+			move();
+			tickCounter = 0;
+		}
 		//Attack
 		checkAttacks();
+		
+		
+	}
 
-		//Inventory
-		inventory.tick();
+	@Override
+	public void render(Graphics g) {
+		g.drawImage(getCurrentAnimationFrame(), (int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), width, height, null);
+		
+	}
+
+	@Override
+	public void die() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private void getEnemyWanderDirection(){
+		
+		
+		
+		//Movement Input
+		xMove = 0;
+		yMove = 0;
+		
+		Random randomNumber = new Random();
+		int random = randomNumber.nextInt(4);
+
+		if (random == 0){
+			yMove = -speed; //up the y-axis
+		}
+		if (random == 1){
+			yMove = speed;
+		}
+		if (random == 2){
+			xMove = -speed;
+		}
+		if (random == 3) {
+			xMove = speed;
+		}
+		
+	
+		//Attack Input
+		attack = false;
+		
+/*		if(handler.getKeyManager().aLeft || handler.getKeyManager().aRight || handler.getKeyManager().aDown || handler.getKeyManager().aUp)
+			attack = true;*/
+	
 		
 	}
 	
@@ -87,7 +141,7 @@ public class Player extends Creature{
 		ar.width = arSize;
 		ar.height = arSize;
 		
-		if(handler.getKeyManager().aUp){
+/*		if(handler.getKeyManager().aUp){
 			ar.x = cb.x + cb.width / 2 - arSize / 2; //set the collision rectangle width of the player
 			ar.y = cb.y - arSize; //set the collision rectangle height of the player
 		}else if(handler.getKeyManager().aDown){
@@ -101,7 +155,7 @@ public class Player extends Creature{
 			ar.y = cb.y + cb.height / 2 - arSize / 2; 
 		}else{
 			return; //not attacking, just return
-		}
+		}*/
 		
 		attackTimer = 0; //set the attack timer to zero because our player will attack
 		
@@ -116,57 +170,10 @@ public class Player extends Creature{
 		}
 	}
 	
-	@Override
-	public void die(){
-		System.out.println("You lose");
-	}
-	
-	private void getInput(){
-		
-		//Movement Input
-		xMove = 0;
-		yMove = 0;
-		
-		if (handler.getKeyManager().up)
-			yMove = -speed; //up the y-axis
-		if(handler.getKeyManager().down)
-			yMove = speed;
-		if(handler.getKeyManager().left)
-			xMove = -speed;
-		if(handler.getKeyManager().right)
-			xMove = speed;
-		
-		//Attack Input
-		attack = false;
-		
-		if(handler.getKeyManager().aLeft || handler.getKeyManager().aRight || handler.getKeyManager().aDown || handler.getKeyManager().aUp)
-			attack = true;
-	
-		
-	}
-	
-
-	@Override
-	public void render(Graphics g) {
-		//width and height parameters determine the size of the final size of the player on the screen
-		//x and y determine the 
-		g.drawImage(getCurrentAnimationFrame(), (int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), width, height, null);
-		
-		//red boundary collision box
-/*		g.setColor(Color.red);
-		g.fillRect((int) (x + bounds.x - handler.getGameCamera().getxOffset()),
-				(int) (y + bounds.y - handler.getGameCamera().getyOffset()),
-				bounds.width, bounds.height);*/
-		
-		inventory.render(g);
-		
-		
-	}
-	
 	private BufferedImage getCurrentAnimationFrame(){
 		
 		//attack animations take priority over movement animations
-		if(attack){
+/*		if(attack){
 			if(handler.getKeyManager().aLeft){
 				return animPunchLeft.getCurrentFrame();
 			}else if(handler.getKeyManager().aRight){
@@ -177,26 +184,18 @@ public class Player extends Creature{
 				return animPunchUp.getCurrentFrame();
 				
 			}	
-		}
+		}*/
 		
 		//movement animations
 		if(xMove < 0){
-			return animLeft.getCurrentFrame();
+			return animWerewolfLeft.getCurrentFrame();
 		}else if(xMove > 0){
-			return animRight.getCurrentFrame();
+			return animWerewolfRight.getCurrentFrame();
 		}else if(yMove < 0){
-			return animUp.getCurrentFrame();
+			return animWerewolfUp.getCurrentFrame();
 		}else{ 
-			return animDown.getCurrentFrame();
+			return animWerewolfDown.getCurrentFrame();
 		}
-	}
-
-	public Inventory getInventory() {
-		return inventory;
-	}
-
-	public void setInventory(Inventory inventory) {
-		this.inventory = inventory;
 	}
 
 }

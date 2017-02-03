@@ -14,7 +14,6 @@ public class SpriteSheet {
 	//crop out characters on the sprite sheet
 	public BufferedImage crop(int x, int y, int height, int width){
 		
-		//87 by 97 pixels
 		return sheet.getSubimage(x, y, width, height);
 	}
 	
